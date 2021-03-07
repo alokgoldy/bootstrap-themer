@@ -22,6 +22,14 @@ app.engine('hbs',handlebars({
 }));
 
 connectDatabase();
+app.use((req,res,next) => {
+    res.locals.currentTheme = null;
+    if (res.app.locals.mytheme) {
+      res.locals.currentTheme = res.app.locals.mytheme;
+    }
+    
+    next();
+})
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
