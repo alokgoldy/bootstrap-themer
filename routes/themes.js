@@ -1,5 +1,7 @@
 import express from 'express';
-import Theme from '../models/themesDb.js'
+import Theme from '../models/themesDb.js';
+import fs from "fs";
+import { execSync } from "child_process";
 
 const router = express.Router();
 
@@ -49,10 +51,53 @@ router.put("/", async (req, res) => {
 });
 
 
-router.get("/:themeName",(req,res) => {
-  console.log("hi")
-  console.log(req.params.themeName);
-  res.redirect("/dashboard");
-})
+
+
+// preview a theme
+router.get("/:themeName", async (req, res) => {
+  const theme = await Theme.findOne({ theme: req.params.themeName });
+  console.log(theme);
+  let content = `
+  $theme-colors: (
+    "primary": ${theme.primary},
+    "secondary":${theme.secondary},
+    "success":${theme.success},
+    "warning":${theme.warning},
+    "danger":${theme.danger},
+    "info":${theme.info},
+  );
+  // Bootstrap and its default variables
+@import "../../node_modules/bootstrap/scss/bootstrap";
+  `;
+
+  fs.writeFileSync("public/sass/theme.scss", content);
+  execSync("node-sass public/sass/theme.scss public/css/theme.css");
+
+  res.render("themes/preview", {
+    layout: "preview",
+  });
+});
+
+router.get("/:themeName/download", async (req, res) => {
+  const theme = await Theme.findOne({ theme: req.params.themeName });
+  console.log(theme);
+  let content = `
+  $theme-colors: (
+    "primary": ${theme.primary},
+    "secondary":${theme.secondary},
+    "success":${theme.success},
+    "warning":${theme.warning},
+    "danger":${theme.danger},
+    "info":${theme.info},
+  );
+  // Bootstrap and its default variables
+@import "../../node_modules/bootstrap/scss/bootstrap";
+  `;
+
+  fs.writeFileSync("public/sass/theme.scss", content);
+  execSync("node-sass public/sass/theme.scss public/css/theme.css");
+
+  res.download("public/css/theme.css");
+});
 
 export {router };
