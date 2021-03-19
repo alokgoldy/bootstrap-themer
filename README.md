@@ -5,9 +5,9 @@ Bootstrap theme downloader , where user can make theme and download it.
 
 
 <div style="text-align: center">
-<img src="pic/bt1.PNG" width="200" />
+<img src="pic/bt1.PNG" width="auto" />
 
 
-<img src="pic/bt2.PNG" width="200"/>
+<img src="pic/bt2.PNG" width="auto"/>
 
 </div>
