@@ -11,7 +11,7 @@ import session from 'express-session';
 import passport  from "passport";
 import Theme from './models/themesDb.js';
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 
